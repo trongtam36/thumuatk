@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI VIP ACCOUNT SCANNER</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root {
+      --bg: #020407;
+      --panel: rgba(5, 14, 20, 0.72);
+      --panel-2: rgba(8, 20, 24, 0.82);
+      --cyan: #22f7ff;
+      --green: #34ff8a;
+      --gold: #ffd166;
+      --orange: #ff9f1c;
+      --purple: #b75cff;
+      --red: #ff4d6d;
+      --silver: #eaf8ff;
+      --text: #effcff;
+      --muted: rgba(234, 248, 255, 0.68);
+      --line: rgba(34, 247, 255, 0.32);
+      --rank-color: #22f7ff;
+      --rank-glow: rgba(34, 247, 255, .45);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      font-family: 'Rajdhani', 'Exo 2', sans-serif;
+      background: var(--bg);
+      overflow-x: hidden;
+    }
+
+    body::selection { background: rgba(34, 247, 255, .35); color: #fff; }
+
+    /* Background Money Rain */
+    .background-system {
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255, 209, 102, .16), transparent 34%),
+        radial-gradient(circle at 84% 20%, rgba(34, 247, 255, .18), transparent 32%),
+        radial-gradient(circle at 48% 82%, rgba(52, 255, 138, .12), transparent 38%),
+        linear-gradient(130deg, #020407 0%, #031015 36%, #100820 70%, #040506 100%);
+    }
+
+    .grid-layer,
+    .indicator-layer,
+    .scanline-layer,
+    .noise-layer,
+    .liquidity-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .grid-layer {
+      opacity: .28;
+      background-image:
+        linear-gradient(rgba(34, 247, 255, .12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 209, 102, .08) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridMove 24s linear infinite;
+      mask-image: radial-gradient(circle at center, black 0%, transparent 86%);
+    }
+
+    .indicator-layer {
+      opacity: .45;
+      background:
+        linear-gradient(115deg, transparent 0 15%, rgba(52, 255, 138, .12) 15.2%, transparent 15.8% 40%, rgba(34, 247, 255, .13) 40.2%, transparent 41% 68%, rgba(255, 209, 102, .12) 68.2%, transparent 69%),
+        repeating-linear-gradient(165deg, transparent 0 62px, rgba(52, 255, 138, .06) 63px 65px, transparent 66px 140px);
+      animation: indicatorSlide 18s ease-in-out infinite alternate;
+    }
+
+    .scanline-layer::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 160px;
+      top: -180px;
+      background: linear-gradient(180deg, transparent, rgba(34, 247, 255, .08), rgba(255, 209, 102, .1), transparent);
+      filter: blur(.2px);
+      animation: globalScan 7s linear infinite;
+    }
+
+    .noise-layer {
+      opacity: .10;
+      mix-blend-mode: screen;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
+      animation: noiseShift .9s steps(2) infinite;
+    }
+
+    .liquidity-glow {
+      background:
+        radial-gradient(circle at var(--x1, 20%) var(--y1, 30%), rgba(255, 209, 102, .18), transparent 24%),
+        radial-gradient(circle at var(--x2, 80%) var(--y2, 60%), rgba(34, 247, 255, .16), transparent 24%);
+      animation: glowDrift 14s ease-in-out infinite alternate;
+    }
+
+    .rain-container, .coin-container, .stream-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .rain-symbol {
+      position: absolute;
+      top: -10vh;
+      left: var(--left);
+      color: var(--color);
+      font-family: 'Orbitron', monospace;
+      font-size: var(--size);
+      font-weight: 700;
+      opacity: var(--opacity);
+      text-shadow: 0 0 14px currentColor;
+      animation: digitalFall var(--duration) linear infinite;
+      animation-delay: var(--delay);
+      will-change: transform;
+    }
+
+    .coin {
+      position: absolute;
+      top: -12vh;
+      left: var(--left);
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #1b1300;
+      font-family: 'Orbitron', monospace;
+      font-size: calc(var(--size) * .46);
+      font-weight: 900;
+      background:
+        radial-gradient(circle at 30% 22%, #fff7c5, transparent 24%),
+        linear-gradient(145deg, #ffef8a, #ffb703 42%, #8f5d00 100%);
+      border: 1px solid rgba(255, 255, 255, .5);
+      box-shadow: 0 0 18px rgba(255, 193, 7, .38), inset 0 0 9px rgba(255,255,255,.4);
+      opacity: var(--opacity);
+      animation: coinFall var(--duration) linear infinite;
+      animation-delay: var(--delay);
+      will-change: transform;
+    }
+
+    .stream-line {
+      position: absolute;
+      left: var(--left);
+      top: var(--top);
+      width: var(--width);
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--color), transparent);
+      opacity: .55;
+      box-shadow: 0 0 14px var(--color);
+      animation: streamMove var(--duration) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+
+    /* Layout */
+    .page {
+      width: min(1280px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 36px 0 110px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 18px 0 34px;
+      position: relative;
+    }
+
+    .system-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--green);
+      border: 1px solid rgba(52, 255, 138, .3);
+      background: rgba(3, 18, 15, .58);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-family: 'Orbitron', monospace;
+      letter-spacing: .12em;
+      font-size: 12px;
+      box-shadow: 0 0 24px rgba(52, 255, 138, .12);
+      backdrop-filter: blur(10px);
+    }
+
+    .system-badge i { animation: pulseDot 1.4s infinite; }
+
+    .hero-title {
+      margin-top: 18px;
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(34px, 6vw, 76px);
+      line-height: 1.03;
+      letter-spacing: .04em;
+      color: #fff;
+      text-shadow:
+        0 0 8px rgba(34, 247, 255, .8),
+        0 0 20px rgba(52, 255, 138, .35),
+        0 0 42px rgba(255, 209, 102, .22);
+      position: relative;
+      animation: titleFlicker 5.5s infinite;
+    }
+
+    .hero-title::before,
+    .hero-title::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .5;
+    }
+
+    .hero-title::before { color: var(--cyan); transform: translate(2px, -1px); clip-path: inset(0 0 58% 0); animation: glitchA 3.5s infinite; }
+    .hero-title::after { color: var(--gold); transform: translate(-2px, 1px); clip-path: inset(58% 0 0 0); animation: glitchB 4.2s infinite; }
+
+    .gloss-sweep {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      top: 48%;
+      height: 34px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), rgba(255,209,102,.55), transparent);
+      transform: skewX(-22deg) translateX(-140%);
+      animation: glossy 4.8s ease-in-out infinite;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .subtitle {
+      margin: 14px auto 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(17px, 2.2vw, 23px);
+      font-weight: 600;
+    }
+
+    .ticker-line {
+      width: min(720px, 92%);
+      height: 34px;
+      margin: 22px auto 0;
+      border-top: 1px solid rgba(34, 247, 255, .25);
+      border-bottom: 1px solid rgba(255, 209, 102, .2);
+      position: relative;
+      overflow: hidden;
+      color: rgba(52, 255, 138, .78);
+      font-family: 'Orbitron', monospace;
+      font-size: 12px;
+      letter-spacing: .18em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(90deg, transparent, rgba(34, 247, 255, .07), transparent);
+    }
+
+    .ticker-line::before {
+      content: "LIQUIDITY STREAM • BLOCKCHAIN VALUATION • AI VIP RISK SCAN • REAL-TIME QUOTE";
+      white-space: nowrap;
+      animation: ticker 16s linear infinite;
+    }
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(330px, .75fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* HUD Cards */
+    .hud-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(255, 209, 102, .08), transparent 24%),
+        linear-gradient(180deg, var(--panel), rgba(2, 6, 9, .88));
+      border: 1px solid rgba(34, 247, 255, .34);
+      box-shadow:
+        0 18px 60px rgba(0,0,0,.54),
+        0 0 0 1px rgba(255, 209, 102, .08) inset,
+        0 0 36px rgba(34, 247, 255, .1);
+      backdrop-filter: blur(18px);
+      clip-path: polygon(0 18px, 18px 0, calc(100% - 18px) 0, 100% 18px, 100% calc(100% - 18px), calc(100% - 18px) 100%, 18px 100%, 0 calc(100% - 18px));
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    }
+
+    .hud-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 209, 102, .58);
+      box-shadow:
+        0 22px 70px rgba(0,0,0,.58),
+        0 0 0 1px rgba(52, 255, 138, .14) inset,
+        0 0 44px rgba(255, 209, 102, .16),
+        0 0 42px rgba(34, 247, 255, .12);
+    }
+
+    .hud-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        url("data:image/svg+xml,%3Csvg width='220' height='160' viewBox='0 0 220 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 130 L50 88 L88 108 L130 48 L165 72 L210 20' fill='none' stroke='%2322f7ff' stroke-opacity='.18' stroke-width='2'/%3E%3Cpath d='M0 38 H50 V26 H88 V48 H132 V31 H185' fill='none' stroke='%23ffd166' stroke-opacity='.12' stroke-width='1'/%3E%3Ctext x='10' y='25' fill='%2334ff8a' fill-opacity='.14' font-size='14' font-family='monospace'%3EBTC 01 VIP%3C/text%3E%3Ctext x='115' y='142' fill='%2322f7ff' fill-opacity='.12' font-size='12' font-family='monospace'%3EAI DATA%3C/text%3E%3C/svg%3E");
+      background-size: 220px 160px;
+      opacity: .7;
+      animation: cardData 18s linear infinite;
+      pointer-events: none;
+    }
+
+    .hud-card::after {
+      content: "";
+      position: absolute;
+      top: -130%;
+      left: -30%;
+      width: 160%;
+      height: 80%;
+      background: linear-gradient(180deg, transparent, rgba(34, 247, 255, .08), rgba(255, 209, 102, .08), transparent);
+      transform: rotate(10deg);
+      animation: internalScan 5.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .corner {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border-color: rgba(255, 209, 102, .8);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .corner.tl { top: 12px; left: 12px; border-top: 2px solid; border-left: 2px solid; }
+    .corner.tr { top: 12px; right: 12px; border-top: 2px solid; border-right: 2px solid; }
+    .corner.bl { bottom: 12px; left: 12px; border-bottom: 2px solid; border-left: 2px solid; }
+    .corner.br { bottom: 12px; right: 12px; border-bottom: 2px solid; border-right: 2px solid; }
+
+    .card-inner { position: relative; z-index: 3; padding: 30px; }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(16px, 2vw, 22px);
+      letter-spacing: .08em;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .section-title i {
+      color: var(--gold);
+      text-shadow: 0 0 16px rgba(255, 209, 102, .55);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .field { position: relative; }
+
+    .field.full { grid-column: 1 / -1; }
+
+    .field label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: rgba(234, 248, 255, .84);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .field label i { color: var(--cyan); }
+
+    .input-shell {
+      position: relative;
+      border-radius: 14px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(34, 247, 255, .65), rgba(52, 255, 138, .18), rgba(255, 209, 102, .5));
+      overflow: hidden;
+    }
+
+    .input-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
+      transform: translateX(-120%);
+      transition: transform .65s ease;
+    }
+
+    .field:hover .input-shell::before,
+    .field:focus-within .input-shell::before { transform: translateX(120%); }
+
+    input, select {
+      width: 100%;
+      height: 54px;
+      border: 0;
+      outline: 0;
+      border-radius: 13px;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, rgba(34, 247, 255, .055), transparent),
+        rgba(1, 10, 14, .88);
+      padding: 0 16px;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      box-shadow: inset 0 0 18px rgba(0,0,0,.52);
+    }
+
+    select { cursor: pointer; color-scheme: dark; }
+    input::placeholder { color: rgba(34, 247, 255, .42); }
+
+    .field:focus-within label { color: var(--gold); text-shadow: 0 0 12px rgba(255, 209, 102, .45); }
+    .field:focus-within .input-shell { box-shadow: 0 0 0 1px rgba(255, 209, 102, .4), 0 0 28px rgba(34, 247, 255, .18); }
+
+    /* Button Effects */
+    .scan-button {
+      margin-top: 24px;
+      width: 100%;
+      height: 66px;
+      border: 0;
+      border-radius: 18px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      color: #041013;
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(16px, 2.1vw, 22px);
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      background: linear-gradient(110deg, var(--cyan), var(--green), var(--gold), var(--purple));
+      background-size: 240% 100%;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, .35) inset,
+        0 0 24px rgba(34, 247, 255, .35),
+        0 0 38px rgba(255, 209, 102, .22);
+      animation: buttonGradient 4s ease-in-out infinite;
+      transition: transform .22s ease, filter .22s ease;
+    }
+
+    .scan-button:hover { transform: translateY(-2px) scale(1.01); filter: brightness(1.18); }
+    .scan-button:active { transform: scale(.985); }
+
+    .scan-button::before {
+      content: "";
+      position: absolute;
+      inset: -80% -30%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.72), transparent);
+      transform: rotate(12deg) translateX(-70%);
+      animation: buttonSweep 2.4s ease-in-out infinite;
+    }
+
+    .scan-button::after {
+      content: "$ BTC ETH USDT VIP 001101";
+      position: absolute;
+      inset: auto 0 5px 0;
+      color: rgba(0, 20, 24, .32);
+      font-size: 10px;
+      letter-spacing: .35em;
+      white-space: nowrap;
+      animation: ticker 10s linear infinite;
+    }
+
+    .scan-button span { position: relative; z-index: 2; display: inline-flex; align-items: center; justify-content: center; gap: 12px; }
+    .scan-button.scanning { animation: buttonGradient 1s ease-in-out infinite, shake .26s linear infinite; }
+
+    .side-stack { display: grid; gap: 20px; }
+
+    /* Notifications */
+    .notify-card .card-inner { padding: 24px; }
+    .notify-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+      font-family: 'Orbitron', monospace;
+      font-size: 14px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      background: var(--orange);
+      box-shadow: 0 0 16px var(--orange);
+      animation: pulseDot 1.2s infinite;
+    }
+
+    .status-dot.done { background: var(--green); box-shadow: 0 0 18px var(--green); }
+
+    .notify-list {
+      min-height: 208px;
+      display: grid;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .notify-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(34, 247, 255, .14);
+      background: rgba(0, 12, 16, .52);
+      color: rgba(234, 248, 255, .86);
+      font-weight: 700;
+      animation: itemIn .45s ease both;
+      box-shadow: inset 0 0 18px rgba(34, 247, 255, .035);
+    }
+
+    .notify-item i { color: var(--gold); }
+    .notify-item.done i { color: var(--green); }
+    .notify-item strong { color: var(--cyan); }
+
+    /* Robot AI */
+    .robot-zone {
+      position: fixed;
+      right: 24px;
+      bottom: 22px;
+      z-index: 50;
+      display: flex;
+      align-items: flex-end;
+      gap: 14px;
+      pointer-events: none;
+    }
+
+    .chat-bubble {
+      width: min(320px, calc(100vw - 150px));
+      min-height: 82px;
+      padding: 15px 18px;
+      border-radius: 20px 20px 6px 20px;
+      color: rgba(234, 248, 255, .92);
+      font-weight: 700;
+      background: linear-gradient(135deg, rgba(4, 20, 26, .9), rgba(20, 10, 35, .74));
+      border: 1px solid rgba(34, 247, 255, .34);
+      box-shadow: 0 0 35px rgba(34, 247, 255, .15), inset 0 0 18px rgba(255, 209, 102, .05);
+      backdrop-filter: blur(16px);
+      position: relative;
+      overflow: hidden;
+      pointer-events: auto;
+    }
+
+    .chat-bubble::before {
+      content: "AI • VIP • DATA • USDT";
+      position: absolute;
+      inset: auto 0 4px 0;
+      color: rgba(52, 255, 138, .12);
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
+      letter-spacing: .25em;
+      white-space: nowrap;
+      animation: ticker 12s linear infinite;
+    }
+
+    .robot {
+      width: 100px;
+      height: 118px;
+      position: relative;
+      animation: robotFloat 3.4s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(34, 247, 255, .35));
+      pointer-events: auto;
+    }
+
+    .robot.glow { filter: drop-shadow(0 0 32px rgba(255, 209, 102, .7)) drop-shadow(0 0 18px rgba(52, 255, 138, .45)); }
+
+    .robot-ring {
+      position: absolute;
+      inset: 8px -8px auto -8px;
+      height: 110px;
+      border: 2px solid rgba(34, 247, 255, .28);
+      border-top-color: rgba(255, 209, 102, .8);
+      border-radius: 50%;
+      animation: ringRotate 5.5s linear infinite;
+    }
+
+    .bot-head {
+      position: absolute;
+      left: 15px;
+      top: 16px;
+      width: 70px;
+      height: 58px;
+      border-radius: 24px 24px 18px 18px;
+      background: linear-gradient(145deg, #ecfbff, #69dfff 38%, #0b5666 100%);
+      border: 2px solid rgba(255,255,255,.7);
+      box-shadow: inset 0 -10px 20px rgba(0,0,0,.24), 0 0 18px rgba(34, 247, 255, .35);
+    }
+
+    .bot-head::before,
+    .bot-head::after {
+      content: "";
+      position: absolute;
+      top: 24px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+      animation: eyeBlink 4s infinite;
+    }
+    .bot-head::before { left: 18px; }
+    .bot-head::after { right: 18px; }
+
+    .bot-antenna {
+      position: absolute;
+      left: 47px;
+      top: 0;
+      width: 6px;
+      height: 20px;
+      background: linear-gradient(var(--cyan), var(--gold));
+      border-radius: 6px;
+    }
+    .bot-antenna::before {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: -5px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 16px var(--gold);
+    }
+
+    .bot-body {
+      position: absolute;
+      left: 24px;
+      bottom: 8px;
+      width: 52px;
+      height: 48px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #ffec99, #ffb703 60%, #8f5d00);
+      border: 2px solid rgba(255,255,255,.55);
+      box-shadow: inset 0 -8px 18px rgba(0,0,0,.24);
+    }
+    .bot-body::before {
+      content: "₿";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(0,0,0,.55);
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 24px;
+    }
+
+    .bot-arm { position: absolute; bottom: 36px; width: 18px; height: 8px; background: #7deeff; border-radius: 10px; }
+    .bot-arm.left { left: 8px; transform: rotate(25deg); }
+    .bot-arm.right { right: 8px; transform: rotate(-25deg); }
+
+    /* Scanner Overlay */
+    .scanner-overlay,
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0, 4, 7, .72);
+      backdrop-filter: blur(12px);
+    }
+
+    .scanner-overlay.active,
+    .popup-overlay.active { display: flex; }
+
+    .scanner-box {
+      width: min(560px, 100%);
+      text-align: center;
+      padding: 34px;
+      position: relative;
+    }
+
+    .radar {
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 22px;
+      border-radius: 50%;
+      border: 1px solid rgba(34, 247, 255, .45);
+      background:
+        radial-gradient(circle, rgba(52, 255, 138, .18) 0 8%, transparent 9%),
+        repeating-radial-gradient(circle, transparent 0 24px, rgba(34, 247, 255, .15) 25px 26px),
+        conic-gradient(from 0deg, rgba(52, 255, 138, .72), transparent 32%, transparent);
+      box-shadow: 0 0 40px rgba(34, 247, 255, .26), inset 0 0 28px rgba(52, 255, 138, .12);
+      animation: ringRotate 1.3s linear infinite;
+      position: relative;
+    }
+
+    .radar::after {
+      content: "AI";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-family: 'Orbitron', monospace;
+      font-size: 38px;
+      text-shadow: 0 0 18px var(--cyan);
+      animation: reverseSpin 1.3s linear infinite;
+    }
+
+    .loading-text {
+      font-family: 'Orbitron', monospace;
+      color: var(--gold);
+      letter-spacing: .08em;
+      min-height: 28px;
+      text-shadow: 0 0 14px rgba(255, 209, 102, .5);
+    }
+
+    .progress-wrap {
+      margin-top: 18px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 247, 255, .35);
+      background: rgba(0,0,0,.42);
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--cyan), var(--gold));
+      box-shadow: 0 0 18px rgba(34, 247, 255, .55);
+      transition: width .12s linear;
+    }
+
+    .percent-text {
+      margin-top: 10px;
+      color: var(--cyan);
+      font-family: 'Orbitron', monospace;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    /* Result Popup */
+    .result-popup {
+      width: min(720px, 100%);
+      transform: scale(.86);
+      opacity: 0;
+      transition: transform .35s ease, opacity .35s ease;
+      border-color: var(--rank-color);
+      box-shadow: 0 0 44px var(--rank-glow), 0 22px 80px rgba(0,0,0,.7);
+    }
+
+    .popup-overlay.active .result-popup { transform: scale(1); opacity: 1; }
+
+    .result-popup.rank-chi-ton {
+      animation: rainbowBorder 3s linear infinite;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .result-item {
+      border: 1px solid rgba(34, 247, 255, .16);
+      background: rgba(0, 14, 18, .58);
+      border-radius: 14px;
+      padding: 13px 14px;
+    }
+
+    .result-item span {
+      display: block;
+      color: rgba(234, 248, 255, .58);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 3px;
+    }
+
+    .result-item strong { font-size: 18px; color: #fff; }
+
+    .rank-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #061013;
+      background: var(--rank-color);
+      box-shadow: 0 0 18px var(--rank-glow);
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+    }
+
+    .price-box {
+      margin: 18px 0;
+      padding: 20px;
+      text-align: center;
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 50% 0%, var(--rank-glow), transparent 58%),
+        rgba(0, 8, 12, .74);
+      border: 1px solid var(--rank-color);
+      box-shadow: 0 0 32px var(--rank-glow), inset 0 0 24px rgba(255,255,255,.035);
+    }
+
+    .price-label {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 800;
+    }
+
+    .price-value {
+      margin-top: 8px;
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(28px, 6vw, 48px);
+      font-weight: 900;
+      color: var(--rank-color);
+      text-shadow: 0 0 18px var(--rank-glow), 0 0 34px var(--rank-glow);
+      word-break: break-word;
+    }
+
+    .note {
+      color: rgba(234, 248, 255, .7);
+      line-height: 1.6;
+      border-left: 3px solid var(--rank-color);
+      padding: 10px 13px;
+      background: rgba(255,255,255,.035);
+      border-radius: 10px;
+    }
+
+    .popup-actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .action-link, .close-btn {
+      flex: 1 1 210px;
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,.18);
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .2s ease, filter .2s ease;
+    }
+
+    .action-link {
+      color: #071014;
+      background: linear-gradient(110deg, var(--rank-color), var(--gold), var(--cyan));
+      box-shadow: 0 0 26px var(--rank-glow);
+    }
+
+    .close-btn {
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+    }
+
+    .action-link:hover, .close-btn:hover { transform: translateY(-2px); filter: brightness(1.12); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 200;
+      width: min(430px, calc(100vw - 40px));
+      padding: 15px 18px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      border-radius: 16px;
+      color: #fff;
+      font-weight: 800;
+      background: rgba(34, 5, 9, .9);
+      border: 1px solid rgba(255, 77, 109, .55);
+      box-shadow: 0 0 30px rgba(255, 77, 109, .25);
+      backdrop-filter: blur(14px);
+    }
+    .toast.show { display: flex; animation: toastIn .35s ease, shake .28s linear 1; }
+    .toast i { color: var(--orange); text-shadow: 0 0 12px var(--orange); }
+
+    /* Rank classes */
+    .rank-so-cap { --rank-color: #34ffb6; --rank-glow: rgba(52, 255, 182, .42); }
+    .rank-trung-cap { --rank-color: #22f7ff; --rank-glow: rgba(34, 247, 255, .46); }
+    .rank-cao-cap { --rank-color: #b75cff; --rank-glow: rgba(183, 92, 255, .48); }
+    .rank-tong-su { --rank-color: #ffb703; --rank-glow: rgba(255, 183, 3, .5); }
+    .rank-vuong-gia { --rank-color: #ff4d6d; --rank-glow: rgba(255, 77, 109, .5); }
+    .rank-chi-ton { --rank-color: #ffffff; --rank-glow: rgba(255, 255, 255, .55); }
+
+    @keyframes gridMove { to { background-position: 240px 240px; } }
+    @keyframes indicatorSlide { to { transform: translate3d(-34px, 18px, 0) scale(1.04); } }
+    @keyframes globalScan { to { top: 120%; } }
+    @keyframes noiseShift { to { transform: translate(2%, -2%); } }
+    @keyframes glowDrift { to { --x1: 70%; --y1: 50%; --x2: 24%; --y2: 76%; } }
+    @keyframes digitalFall { to { transform: translate3d(0, 125vh, 0); } }
+    @keyframes coinFall { to { transform: translate3d(26px, 125vh, 0) rotate(720deg); } }
+    @keyframes streamMove { 0%,100% { transform: translateX(-70px) scaleX(.6); opacity: .18; } 50% { transform: translateX(90px) scaleX(1.25); opacity: .72; } }
+    @keyframes titleFlicker { 0%, 100% { opacity: 1; } 45% { opacity: .96; } 46% { opacity: .78; } 47% { opacity: 1; } 73% { opacity: .92; } 74% { opacity: 1; } }
+    @keyframes glitchA { 0%, 92%, 100% { transform: translate(2px,-1px); } 94% { transform: translate(8px,1px); } 96% { transform: translate(-6px,-2px); } }
+    @keyframes glitchB { 0%, 88%, 100% { transform: translate(-2px,1px); } 90% { transform: translate(-9px,2px); } 92% { transform: translate(5px,-2px); } }
+    @keyframes glossy { 0%, 45% { transform: skewX(-22deg) translateX(-140%); } 65%, 100% { transform: skewX(-22deg) translateX(140%); } }
+    @keyframes ticker { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+    @keyframes cardData { to { background-position: 220px 160px; } }
+    @keyframes internalScan { 0%, 40% { top: -130%; } 75%, 100% { top: 150%; } }
+    @keyframes buttonGradient { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+    @keyframes buttonSweep { 0% { transform: rotate(12deg) translateX(-80%); } 55%,100% { transform: rotate(12deg) translateX(80%); } }
+    @keyframes pulseDot { 0%,100% { transform: scale(.9); opacity: .72; } 50% { transform: scale(1.18); opacity: 1; } }
+    @keyframes itemIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes robotFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    @keyframes ringRotate { to { transform: rotate(360deg); } }
+    @keyframes reverseSpin { to { transform: rotate(-360deg); } }
+    @keyframes eyeBlink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.15); } }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-2px); } 75% { transform: translateX(2px); } }
+    @keyframes rainbowBorder { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .main-layout { grid-template-columns: 1fr; }
+      .side-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .robot-zone { right: 16px; bottom: 16px; }
+      .robot { width: 84px; height: 100px; }
+      .bot-head { width: 60px; height: 50px; left: 12px; }
+      .bot-body { width: 46px; height: 42px; left: 19px; }
+      .chat-bubble { width: min(290px, calc(100vw - 125px)); }
+    }
+
+    @media (max-width: 720px) {
+      .page { width: min(100% - 22px, 1280px); padding-top: 18px; padding-bottom: 160px; }
+      .form-grid, .result-grid, .side-stack { grid-template-columns: 1fr; }
+      .card-inner { padding: 22px; }
+      .notify-card .card-inner { padding: 20px; }
+      .hero-title { letter-spacing: .02em; }
+      .system-badge { font-size: 10px; padding: 7px 11px; }
+      .scan-button { height: 60px; letter-spacing: .06em; }
+      .robot-zone { align-items: flex-end; gap: 8px; right: 10px; bottom: 10px; }
+      .chat-bubble { width: min(245px, calc(100vw - 98px)); min-height: 70px; padding: 12px 14px; font-size: 14px; }
+      .robot { width: 72px; height: 88px; }
+      .robot-ring { height: 78px; }
+      .bot-head { width: 52px; height: 44px; left: 10px; top: 13px; border-radius: 18px 18px 14px 14px; }
+      .bot-head::before, .bot-head::after { top: 18px; width: 9px; height: 9px; }
+      .bot-body { width: 40px; height: 36px; left: 16px; bottom: 8px; }
+      .bot-arm { display: none; }
+      .coin:nth-child(n+18), .rain-symbol:nth-child(n+36), .stream-line:nth-child(n+14) { display: none; }
+      .toast { top: 14px; right: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-system" aria-hidden="true">
+    <div class="liquidity-glow"></div>
+    <div class="grid-layer"></div>
+    <div class="indicator-layer"></div>
+    <div class="rain-container" id="rainContainer"></div>
+    <div class="coin-container" id="coinContainer"></div>
+    <div class="stream-container" id="streamContainer"></div>
+    <div class="scanline-layer"></div>
+    <div class="noise-layer"></div>
+  </div>
+
+  <main class="page">
+    <header>
+      <div class="system-badge"><i class="fa-solid fa-circle"></i> CRYPTO WEB3 AI TERMINAL</div>
+      <h1 class="hero-title" data-text="AI VIP ACCOUNT SCANNER">AI VIP ACCOUNT SCANNER<span class="gloss-sweep"></span></h1>
+      <p class="subtitle">Hệ thống quét dữ liệu và định giá thu mua tài khoản VIP tự động bằng AI</p>
+      <div class="ticker-line"></div>
+    </header>
+
+    <section class="main-layout">
+      <div class="hud-card form-card">
+        <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+        <div class="card-inner">
+          <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> Crypto Trading Box - Nhập dữ liệu định giá</h2>
+          <form id="scannerForm" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="username"><i class="fa-solid fa-user-astronaut"></i> Tên đăng nhập</label>
+                <div class="input-shell"><input id="username" type="text" placeholder="Nhập tên nhân vật / tài khoản" autocomplete="off"></div>
+              </div>
+              <div class="field">
+                <label for="gameSite"><i class="fa-solid fa-gamepad"></i> Trang game</label>
+                <div class="input-shell"><input id="gameSite" type="text" placeholder="Nhập tên trang game" autocomplete="off"></div>
+              </div>
+              <div class="field">
+                <label for="vipLevel"><i class="fa-solid fa-crown"></i> Cấp độ VIP</label>
+                <div class="input-shell"><select id="vipLevel"></select></div>
+              </div>
+              <div class="field">
+                <label for="month"><i class="fa-solid fa-calendar-days"></i> Tháng nạp</label>
+                <div class="input-shell"><select id="month"></select></div>
+              </div>
+              <div class="field">
+                <label for="year"><i class="fa-solid fa-calendar-check"></i> Năm nạp</label>
+                <div class="input-shell"><select id="year"></select></div>
+              </div>
+              <div class="field">
+                <label for="deposit"><i class="fa-solid fa-wallet"></i> Tổng nạp tháng</label>
+                <div class="input-shell"><input id="deposit" inputmode="numeric" type="text" placeholder="Ví dụ: 10.000.000 VNĐ" autocomplete="off"></div>
+              </div>
+            </div>
+            <button class="scan-button" id="scanButton" type="submit"><span><i class="fa-solid fa-robot"></i> CHECK THÔNG TIN</span></button>
+          </form>
+        </div>
+      </div>
+
+      <aside class="side-stack">
+        <div class="hud-card notify-card">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="card-inner">
+            <div class="notify-title"><span><i class="fa-solid fa-hourglass-half"></i> Tài khoản đang chờ chuyển đổi</span><span class="status-dot"></span></div>
+            <div class="notify-list" id="pendingList"></div>
+          </div>
+        </div>
+        <div class="hud-card notify-card">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="card-inner">
+            <div class="notify-title"><span><i class="fa-solid fa-circle-check"></i> Đã chuyển VIP và quy đổi</span><span class="status-dot done"></span></div>
+            <div class="notify-list" id="doneList"></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="robot-zone" aria-live="polite">
+    <div class="chat-bubble" id="chatBubble">Xin chào! Hãy nhập thông tin tài khoản để tôi quét giá trị VIP.</div>
+    <div class="robot" id="robotAi" aria-label="Robot AI assistant">
+      <div class="robot-ring"></div>
+      <div class="bot-antenna"></div>
+      <div class="bot-head"></div>
+      <div class="bot-arm left"></div>
+      <div class="bot-arm right"></div>
+      <div class="bot-body"></div>
+    </div>
+  </div>
+
+  <div class="scanner-overlay" id="scannerOverlay">
+    <div class="hud-card scanner-box">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="radar"></div>
+      <div class="loading-text" id="loadingText">Đang phân tích cấp VIP...</div>
+      <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="percent-text" id="percentText">0%</div>
+    </div>
+  </div>
+
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="hud-card result-popup" id="resultPopup">
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+      <div class="card-inner">
+        <h2 class="section-title"><i class="fa-solid fa-gem"></i> Kết quả quét giá trị tài khoản VIP</h2>
+        <div class="result-grid">
+          <div class="result-item"><span>Tên đăng nhập</span><strong id="resUser">---</strong></div>
+          <div class="result-item"><span>Trang game</span><strong id="resGame">---</strong></div>
+          <div class="result-item"><span>Cấp VIP</span><strong id="resVip">---</strong></div>
+          <div class="result-item"><span>Rank</span><strong class="rank-tag" id="resRank"><i class="fa-solid fa-bolt"></i>---</strong></div>
+          <div class="result-item"><span>Tháng/Năm</span><strong id="resTime">---</strong></div>
+          <div class="result-item"><span>Tổng nạp</span><strong id="resDeposit">---</strong></div>
+        </div>
+        <div class="price-box">
+          <div class="price-label">Giá thu mua AI đề xuất</div>
+          <div class="price-value" id="resPrice">0 VNĐ</div>
+        </div>
+        <p class="note">Giá hiển thị chỉ là giá dự kiến mô phỏng từ AI. Giá chính thức phụ thuộc vào kiểm tra tài khoản, máy chủ, lịch sử nạp và tình trạng giao dịch thực tế.</p>
+        <div class="popup-actions">
+          <a class="action-link" href="https://example.com" target="_blank" rel="noopener"><i class="fa-solid fa-handshake-angle"></i> LIÊN HỆ GIAO DỊCH NGAY</a>
+          <button class="close-btn" id="closePopup" type="button"><i class="fa-solid fa-xmark"></i> ĐÓNG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><i class="fa-solid fa-triangle-exclamation"></i><span id="toastText">Vui lòng nhập đầy đủ dữ liệu.</span></div>
+
+  <script>
+    // Background Money Rain
+    const rainContainer = document.getElementById('rainContainer');
+    const coinContainer = document.getElementById('coinContainer');
+    const streamContainer = document.getElementById('streamContainer');
+    const rainSymbols = ['0', '1', '$', 'BTC', 'ETH', 'SOL', 'USDT', 'VIP', 'AI', 'BUY', 'DATA', 'SCAN'];
+    const rainColors = ['#22f7ff', '#34ff8a', '#ffd166', '#eaf8ff'];
+    const coinSymbols = ['₿', '$', '₫', 'Ξ', '₮'];
+
+    function createBackgroundEffects() {
+      const isMobile = window.innerWidth < 720;
+      const symbolCount = isMobile ? 34 : 62;
+      const coinCount = isMobile ? 16 : 28;
+      const streamCount = isMobile ? 12 : 24;
+
+      rainContainer.innerHTML = '';
+      coinContainer.innerHTML = '';
+      streamContainer.innerHTML = '';
+
+      for (let i = 0; i < symbolCount; i++) {
+        const el = document.createElement('span');
+        el.className = 'rain-symbol';
+        el.textContent = rainSymbols[Math.floor(Math.random() * rainSymbols.length)];
+        el.style.setProperty('--left', `${Math.random() * 100}%`);
+        el.style.setProperty('--size', `${Math.random() * 15 + 10}px`);
+        el.style.setProperty('--opacity', `${Math.random() * .38 + .12}`);
+        el.style.setProperty('--duration', `${Math.random() * 11 + 9}s`);
+        el.style.setProperty('--delay', `${Math.random() * -18}s`);
+        el.style.setProperty('--color', rainColors[Math.floor(Math.random() * rainColors.length)]);
+        rainContainer.appendChild(el);
+      }
+
+      for (let i = 0; i < coinCount; i++) {
+        const coin = document.createElement('span');
+        coin.className = 'coin';
+        coin.textContent = coinSymbols[Math.floor(Math.random() * coinSymbols.length)];
+        coin.style.setProperty('--left', `${Math.random() * 100}%`);
+        coin.style.setProperty('--size', `${Math.random() * 24 + 24}px`);
+        coin.style.setProperty('--opacity', `${Math.random() * .38 + .18}`);
+        coin.style.setProperty('--duration', `${Math.random() * 12 + 11}s`);
+        coin.style.setProperty('--delay', `${Math.random() * -22}s`);
+        coinContainer.appendChild(coin);
+      }
+
+      for (let i = 0; i < streamCount; i++) {
+        const line = document.createElement('span');
+        line.className = 'stream-line';
+        line.style.setProperty('--left', `${Math.random() * 100}%`);
+        line.style.setProperty('--top', `${Math.random() * 100}%`);
+        line.style.setProperty('--width', `${Math.random() * 180 + 80}px`);
+        line.style.setProperty('--duration', `${Math.random() * 5 + 4}s`);
+        line.style.setProperty('--delay', `${Math.random() * -8}s`);
+        line.style.setProperty('--color', rainColors[Math.floor(Math.random() * rainColors.length)]);
+        streamContainer.appendChild(line);
+      }
+    }
+
+    // Form Styling and Initial Data
+    const vipLevel = document.getElementById('vipLevel');
+    const monthSelect = document.getElementById('month');
+    const yearSelect = document.getElementById('year');
+    const depositInput = document.getElementById('deposit');
+
+    function initSelects() {
+      vipLevel.innerHTML = '<option value="">Chọn cấp VIP</option>';
+      for (let i = 3; i <= 60; i++) vipLevel.insertAdjacentHTML('beforeend', `<option value="${i}">VIP ${i}</option>`);
+      monthSelect.innerHTML = '<option value="">Chọn tháng</option>';
+      for (let i = 1; i <= 12; i++) monthSelect.insertAdjacentHTML('beforeend', `<option value="${i}">Tháng ${i}</option>`);
+      const yearNow = new Date().getFullYear();
+      yearSelect.innerHTML = '<option value="">Chọn năm</option>';
+      for (let i = yearNow; i >= yearNow - 5; i--) yearSelect.insertAdjacentHTML('beforeend', `<option value="${i}">${i}</option>`);
+    }
+
+    function onlyDigits(value) { return String(value || '').replace(/\D/g, ''); }
+    function parseMoney(value) { return Number(onlyDigits(value)); }
+    function formatVND(value) { return Math.round(Number(value || 0)).toLocaleString('vi-VN') + ' VNĐ'; }
+
+    depositInput.addEventListener('input', () => {
+      const digits = onlyDigits(depositInput.value);
+      depositInput.value = digits ? Number(digits).toLocaleString('vi-VN') + ' VNĐ' : '';
+    });
+
+    // Rank Logic
+    const ranks = [
+      { name: 'Sơ Cấp', min: 3, max: 5, factor: .8, cls: 'rank-so-cap' },
+      { name: 'Trung Cấp', min: 6, max: 10, factor: 1.0, cls: 'rank-trung-cap' },
+      { name: 'Cao Cấp', min: 11, max: 15, factor: 1.2, cls: 'rank-cao-cap' },
+      { name: 'Tông Sư', min: 16, max: 25, factor: 1.5, cls: 'rank-tong-su' },
+      { name: 'Vương Giả', min: 26, max: 40, factor: 1.9, cls: 'rank-vuong-gia' },
+      { name: 'Chí Tôn', min: 41, max: 60, factor: 2.3, cls: 'rank-chi-ton' }
+    ];
+
+    function getRank(vip) { return ranks.find(r => vip >= r.min && vip <= r.max) || ranks[0]; }
+    function getLevelFactor(vip, rank) {
+      if (rank.max === rank.min) return 1;
+      return 1 + ((vip - rank.min) * 0.2 / (rank.max - rank.min));
+    }
+    function calculatePrice(deposit, vip) {
+      const rank = getRank(vip);
+      const collectRate = 0.2;
+      const levelFactor = getLevelFactor(vip, rank);
+      const price = deposit * collectRate * rank.factor * levelFactor;
+      return { price: Math.round(price / 1000) * 1000, rank, levelFactor };
+    }
+
+    // Toast Validation
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toastText');
+    let toastTimer;
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      toastText.textContent = message;
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    // Notifications
+    const pendingList = document.getElementById('pendingList');
+    const doneList = document.getElementById('doneList');
+    const pendingMessages = [
+      'đang chờ chuyển đổi VIP', 'đang được AI phân tích giá trị', 'đang chờ xác nhận giao dịch',
+      'đang được định giá tài khoản', 'đang quét lịch sử nạp', 'đang kiểm tra thanh khoản VIP'
+    ];
+    const doneMessages = [
+      'đã chuyển VIP thành công', 'đã nhận báo giá thành công', 'đã hoàn tất giao dịch',
+      'đã chốt giá thu mua', 'đã hoàn tất chuyển đổi', 'đã nhận định giá AI'
+    ];
+    const names = ['Dragon89', 'KingVIP', 'ThanhLong', 'Cyber88', 'MoneyPro', 'VipGold', 'Shadow88', 'CyberVN', 'GoldKing', 'CoinVIP', 'Rich89', 'BlockPro'];
+
+    function maskName(name) {
+      if (name.length <= 5) return name[0] + '***';
+      return name.slice(0, Math.min(5, name.length - 2)) + '***' + name.slice(-2);
+    }
+
+    function addNotification(list, type) {
+      const name = maskName(names[Math.floor(Math.random() * names.length)]);
+      const msgArray = type === 'done' ? doneMessages : pendingMessages;
+      const item = document.createElement('div');
+      item.className = `notify-item ${type === 'done' ? 'done' : ''}`;
+      item.innerHTML = `<i class="fa-solid ${type === 'done' ? 'fa-circle-check' : 'fa-spinner'}"></i><span><strong>${name}</strong> ${msgArray[Math.floor(Math.random() * msgArray.length)]}</span>`;
+      list.prepend(item);
+      while (list.children.length > 6) list.removeChild(list.lastElementChild);
+    }
+
+    function seedNotifications() {
+      for (let i = 0; i < 6; i++) {
+        addNotification(pendingList, 'pending');
+        addNotification(doneList, 'done');
+      }
+      setInterval(() => addNotification(pendingList, 'pending'), 2600);
+      setInterval(() => addNotification(doneList, 'done'), 3400);
+    }
+
+    // Robot AI
+    const chatBubble = document.getElementById('chatBubble');
+    const robotAi = document.getElementById('robotAi');
+    const robotMessages = [
+      'Xin chào! Hãy nhập thông tin tài khoản để tôi quét giá trị VIP.',
+      'Hệ thống AI đang phân tích dữ liệu giao dịch tài sản theo thời gian thực.',
+      'Tài khoản VIP càng cao, hiệu ứng định giá tài sản càng mạnh.',
+      'Dữ liệu đang được mã hóa trong vùng quét an toàn.',
+      'AI đang theo dõi dòng thanh khoản và lịch sử nạp của tài khoản.',
+      'Sau khi có giá dự kiến, bạn có thể bấm liên hệ giao dịch ngay.'
+    ];
+    let messageIndex = 0;
+    let robotInterval;
+    function startRobotChat() {
+      robotInterval = setInterval(() => {
+        messageIndex = (messageIndex + 1) % robotMessages.length;
+        chatBubble.textContent = robotMessages[messageIndex];
+      }, 4800);
+    }
+    function setRobotMessage(message, glow = false) {
+      chatBubble.textContent = message;
+      robotAi.classList.toggle('glow', glow);
+    }
+
+    // Scanner Overlay and Popup
+    const form = document.getElementById('scannerForm');
+    const scanButton = document.getElementById('scanButton');
+    const scannerOverlay = document.getElementById('scannerOverlay');
+    const loadingText = document.getElementById('loadingText');
+    const progressBar = document.getElementById('progressBar');
+    const percentText = document.getElementById('percentText');
+    const popupOverlay = document.getElementById('popupOverlay');
+    const resultPopup = document.getElementById('resultPopup');
+    const closePopup = document.getElementById('closePopup');
+
+    const loadingMessages = [
+      'Đang phân tích cấp VIP...',
+      'Đang kiểm tra dữ liệu giao dịch...',
+      'Đang quét dòng tiền tài khoản...',
+      'Đang tính toán tỷ lệ thanh khoản...',
+      'Đang tạo báo giá AI...'
+    ];
+
+    function runScanner(callback) {
+      let percent = 0;
+      let textIndex = 0;
+      scannerOverlay.classList.add('active');
+      progressBar.style.width = '0%';
+      percentText.textContent = '0%';
+      loadingText.textContent = loadingMessages[0];
+      scanButton.classList.add('scanning');
+      scanButton.querySelector('span').innerHTML = '<i class="fa-solid fa-satellite-dish"></i> AI SCANNING...';
+      setRobotMessage('Đang quét dữ liệu...', true);
+
+      const timer = setInterval(() => {
+        percent += Math.floor(Math.random() * 8) + 4;
+        if (percent > 100) percent = 100;
+        progressBar.style.width = percent + '%';
+        percentText.textContent = percent + '%';
+        const nextIndex = Math.min(Math.floor(percent / 22), loadingMessages.length - 1);
+        if (nextIndex !== textIndex) {
+          textIndex = nextIndex;
+          loadingText.textContent = loadingMessages[textIndex];
+        }
+        if (percent >= 100) {
+          clearInterval(timer);
+          setTimeout(() => {
+            scannerOverlay.classList.remove('active');
+            scanButton.classList.remove('scanning');
+            scanButton.querySelector('span').innerHTML = '<i class="fa-solid fa-robot"></i> CHECK THÔNG TIN';
+            setRobotMessage('Đã hoàn tất phân tích tài khoản.', true);
+            callback();
+          }, 420);
+        }
+      }, 110);
+    }
+
+    function animatePrice(target) {
+      const el = document.getElementById('resPrice');
+      const duration = 1200;
+      const start = performance.now();
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = formatVND(target * eased);
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = formatVND(target);
+      }
+      requestAnimationFrame(step);
+    }
+
+    function showResult(data) {
+      const { username, gameSite, vip, month, year, deposit, price, rank } = data;
+      resultPopup.className = `hud-card result-popup ${rank.cls}`;
+      document.getElementById('resUser').textContent = username;
+      document.getElementById('resGame').textContent = gameSite;
+      document.getElementById('resVip').textContent = 'VIP ' + vip;
+      document.getElementById('resRank').innerHTML = `<i class="fa-solid fa-bolt"></i>${rank.name}`;
+      document.getElementById('resTime').textContent = `Tháng ${month}/${year}`;
+      document.getElementById('resDeposit').textContent = formatVND(deposit);
+      document.getElementById('resPrice').textContent = '0 VNĐ';
+      popupOverlay.classList.add('active');
+      animatePrice(price);
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const gameSite = document.getElementById('gameSite').value.trim();
+      const vip = Number(vipLevel.value);
+      const month = monthSelect.value;
+      const year = yearSelect.value;
+      const deposit = parseMoney(depositInput.value);
+
+      if (!username || !gameSite || !vip || !month || !year || !depositInput.value.trim()) {
+        showToast('Vui lòng nhập đầy đủ dữ liệu để AI bắt đầu quét tài khoản.');
+        return;
+      }
+      if (!Number.isFinite(deposit) || deposit <= 0) {
+        showToast('Vui lòng nhập số tiền nạp hợp lệ.');
+        return;
+      }
+
+      const calculated = calculatePrice(deposit, vip);
+      runScanner(() => showResult({ username, gameSite, vip, month, year, deposit, ...calculated }));
+    });
+
+    closePopup.addEventListener('click', () => {
+      popupOverlay.classList.remove('active');
+      setRobotMessage(robotMessages[messageIndex], false);
+    });
+
+    popupOverlay.addEventListener('click', (event) => {
+      if (event.target === popupOverlay) closePopup.click();
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && popupOverlay.classList.contains('active')) closePopup.click();
+    });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(createBackgroundEffects, 250);
+    });
+
+    initSelects();
+    createBackgroundEffects();
+    seedNotifications();
+    startRobotChat();
+  </script>
+</body>
+</html>
