@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>AI VIP ACCOUNT SCANNER</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -983,6 +983,421 @@
       .coin:nth-child(n+18), .rain-symbol:nth-child(n+36), .stream-line:nth-child(n+14) { display: none; }
       .toast { top: 14px; right: 12px; }
     }
+
+
+    /* Mobile Smoothness & Touch Upgrade - giữ nguyên logic cũ */
+    :root { --vh: 1vh; }
+
+    html,
+    body {
+      width: 100%;
+      max-width: 100%;
+      min-height: calc(var(--vh, 1vh) * 100);
+      overscroll-behavior-x: none;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    button,
+    a,
+    input,
+    select,
+    .scan-button,
+    .close-btn,
+    .action-link {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    input,
+    select,
+    textarea,
+    button {
+      font-size: 16px;
+    }
+
+    select,
+    input {
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    select {
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(34,247,255,.95) 50%),
+        linear-gradient(135deg, rgba(34,247,255,.95) 50%, transparent 50%),
+        linear-gradient(90deg, transparent, transparent);
+      background-position:
+        calc(100% - 20px) 50%,
+        calc(100% - 14px) 50%,
+        100% 0;
+      background-size: 6px 6px, 6px 6px, 2.7em 2.7em;
+      background-repeat: no-repeat;
+      padding-right: 44px;
+    }
+
+    .scanner-overlay,
+    .popup-overlay {
+      min-height: calc(var(--vh, 1vh) * 100);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      padding-top: max(24px, env(safe-area-inset-top));
+      padding-right: max(24px, env(safe-area-inset-right));
+      padding-bottom: max(24px, env(safe-area-inset-bottom));
+      padding-left: max(24px, env(safe-area-inset-left));
+    }
+
+    .scanner-box,
+    .result-popup {
+      max-height: calc((var(--vh, 1vh) * 100) - 48px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+
+    .result-popup .card-inner,
+    .scanner-box {
+      overflow-wrap: anywhere;
+    }
+
+    .robot-zone,
+    .chat-bubble,
+    .robot {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .modal-open .robot-zone {
+      opacity: .18;
+      pointer-events: none;
+    }
+
+    .scan-button,
+    .action-link,
+    .close-btn {
+      min-height: 52px;
+    }
+
+    .scan-button:disabled {
+      cursor: wait;
+      opacity: .82;
+      filter: saturate(.9);
+    }
+
+    @media (hover: none) {
+      .hud-card:hover,
+      .scan-button:hover,
+      .action-link:hover,
+      .close-btn:hover {
+        transform: none;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        min-height: calc(var(--vh, 1vh) * 100);
+      }
+
+      .background-system {
+        min-height: calc(var(--vh, 1vh) * 100);
+      }
+
+      .page {
+        width: 100%;
+        padding: max(16px, env(safe-area-inset-top)) 11px calc(112px + env(safe-area-inset-bottom));
+      }
+
+      header {
+        padding-top: 6px;
+        padding-bottom: 22px;
+      }
+
+      .hero-title {
+        font-size: clamp(27px, 10vw, 42px);
+        line-height: 1.12;
+        overflow-wrap: anywhere;
+        word-break: keep-all;
+      }
+
+      .subtitle {
+        font-size: 16px;
+        padding: 0 4px;
+      }
+
+      .ticker-line {
+        height: 30px;
+        font-size: 10px;
+      }
+
+      .main-layout {
+        gap: 16px;
+      }
+
+      .hud-card {
+        border-radius: 18px;
+        clip-path: polygon(0 14px, 14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px));
+        backdrop-filter: blur(12px);
+      }
+
+      .card-inner {
+        padding: 18px 15px;
+      }
+
+      .section-title {
+        gap: 9px;
+        margin-bottom: 18px;
+        font-size: 14px;
+        line-height: 1.35;
+      }
+
+      .form-grid {
+        gap: 14px;
+      }
+
+      .field label {
+        font-size: 13px;
+        margin-bottom: 7px;
+      }
+
+      input,
+      select {
+        height: 52px;
+        border-radius: 12px;
+        padding-left: 14px;
+      }
+
+      .input-shell {
+        border-radius: 13px;
+      }
+
+      .scan-button {
+        margin-top: 18px;
+        height: 58px;
+        border-radius: 15px;
+        font-size: 15px;
+        line-height: 1.25;
+      }
+
+      .scan-button span {
+        width: 100%;
+        padding: 0 10px;
+        gap: 8px;
+      }
+
+      .notify-list {
+        min-height: auto;
+        max-height: 260px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-right: 2px;
+      }
+
+      .notify-item {
+        padding: 10px;
+        border-radius: 12px;
+        line-height: 1.25;
+      }
+
+      .robot-zone {
+        right: max(8px, env(safe-area-inset-right));
+        bottom: max(8px, env(safe-area-inset-bottom));
+        pointer-events: none;
+      }
+
+      .robot-zone .chat-bubble,
+      .robot-zone .robot {
+        pointer-events: none;
+      }
+
+      .chat-bubble {
+        width: min(220px, calc(100vw - 92px));
+        min-height: 58px;
+        padding: 10px 12px 18px;
+        font-size: 13px;
+        line-height: 1.3;
+      }
+
+      .robot {
+        opacity: .86;
+      }
+
+      .scanner-overlay,
+      .popup-overlay {
+        align-items: flex-start;
+        justify-content: center;
+        padding: max(12px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+      }
+
+      .scanner-box,
+      .result-popup {
+        width: 100%;
+        max-height: calc((var(--vh, 1vh) * 100) - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      }
+
+      .scanner-box {
+        padding: 24px 18px;
+        margin: auto 0;
+      }
+
+      .radar {
+        width: 132px;
+        height: 132px;
+        margin-bottom: 16px;
+      }
+
+      .radar::after {
+        font-size: 30px;
+      }
+
+      .result-popup .card-inner {
+        padding: 18px 14px;
+      }
+
+      .result-grid {
+        gap: 10px;
+        margin: 14px 0;
+      }
+
+      .result-item {
+        padding: 11px 12px;
+      }
+
+      .result-item strong {
+        font-size: 16px;
+      }
+
+      .rank-tag {
+        max-width: 100%;
+        white-space: normal;
+        justify-content: center;
+        line-height: 1.25;
+      }
+
+      .price-box {
+        margin: 14px 0;
+        padding: 16px 12px;
+      }
+
+      .price-value {
+        font-size: clamp(24px, 9vw, 36px);
+        line-height: 1.22;
+      }
+
+      .note {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .popup-actions {
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .action-link,
+      .close-btn {
+        flex-basis: 100%;
+        min-height: 50px;
+        border-radius: 13px;
+        font-size: 13px;
+        line-height: 1.25;
+        padding: 10px;
+      }
+
+      .toast {
+        top: max(10px, env(safe-area-inset-top));
+        left: 10px;
+        right: 10px;
+        width: auto;
+        padding: 13px 14px;
+        font-size: 14px;
+        z-index: 250;
+      }
+
+      .hud-card::after,
+      .scan-button::before {
+        animation-duration: 7s;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .system-badge {
+        max-width: 100%;
+        white-space: normal;
+        justify-content: center;
+      }
+
+      .hero-title {
+        font-size: clamp(24px, 10vw, 36px);
+      }
+
+      .chat-bubble {
+        display: none;
+      }
+
+      .robot {
+        width: 62px;
+        height: 76px;
+      }
+
+      .robot-ring {
+        height: 66px;
+      }
+
+      .bot-head {
+        width: 44px;
+        height: 38px;
+        left: 9px;
+        top: 12px;
+      }
+
+      .bot-head::before,
+      .bot-head::after {
+        top: 15px;
+      }
+
+      .bot-body {
+        width: 34px;
+        height: 31px;
+        left: 14px;
+      }
+
+      .bot-body::before {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .card-inner,
+      .result-popup .card-inner {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .section-title {
+        font-size: 13px;
+      }
+
+      .scan-button {
+        font-size: 13px;
+        letter-spacing: .04em;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1299,6 +1714,31 @@
     const resultPopup = document.getElementById('resultPopup');
     const closePopup = document.getElementById('closePopup');
 
+    let isRunningScanner = false;
+
+    function updateViewportUnit() {
+      const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      document.documentElement.style.setProperty('--vh', `${viewportHeight * 0.01}px`);
+    }
+
+    function setAppModalLock(locked) {
+      document.body.classList.toggle('modal-open', Boolean(locked));
+    }
+
+    function focusFirstEmptyField(fields) {
+      const target = fields.find(field => !String(field.value || '').trim());
+      if (target && window.innerWidth <= 720) {
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    updateViewportUnit();
+    window.addEventListener('orientationchange', updateViewportUnit, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', updateViewportUnit, { passive: true });
+    }
+
     const loadingMessages = [
       'Đang phân tích cấp VIP...',
       'Đang kiểm tra dữ liệu giao dịch...',
@@ -1308,9 +1748,13 @@
     ];
 
     function runScanner(callback) {
+      if (isRunningScanner) return;
+      isRunningScanner = true;
       let percent = 0;
       let textIndex = 0;
       scannerOverlay.classList.add('active');
+      setAppModalLock(true);
+      scanButton.disabled = true;
       progressBar.style.width = '0%';
       percentText.textContent = '0%';
       loadingText.textContent = loadingMessages[0];
@@ -1332,6 +1776,9 @@
           clearInterval(timer);
           setTimeout(() => {
             scannerOverlay.classList.remove('active');
+            setAppModalLock(false);
+            isRunningScanner = false;
+            scanButton.disabled = false;
             scanButton.classList.remove('scanning');
             scanButton.querySelector('span').innerHTML = '<i class="fa-solid fa-robot"></i> CHECK THÔNG TIN';
             setRobotMessage('Đã hoàn tất phân tích tài khoản.', true);
@@ -1365,12 +1812,16 @@
       document.getElementById('resTime').textContent = `Tháng ${month}/${year}`;
       document.getElementById('resDeposit').textContent = formatVND(deposit);
       document.getElementById('resPrice').textContent = '0 VNĐ';
+      resultPopup.scrollTop = 0;
+      popupOverlay.scrollTop = 0;
       popupOverlay.classList.add('active');
+      setAppModalLock(true);
       animatePrice(price);
     }
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
+      if (isRunningScanner) return;
       const username = document.getElementById('username').value.trim();
       const gameSite = document.getElementById('gameSite').value.trim();
       const vip = Number(vipLevel.value);
@@ -1379,10 +1830,22 @@
       const deposit = parseMoney(depositInput.value);
 
       if (!username || !gameSite || !vip || !month || !year || !depositInput.value.trim()) {
+        focusFirstEmptyField([
+          document.getElementById('username'),
+          document.getElementById('gameSite'),
+          vipLevel,
+          monthSelect,
+          yearSelect,
+          depositInput
+        ]);
         showToast('Vui lòng nhập đầy đủ dữ liệu để AI bắt đầu quét tài khoản.');
         return;
       }
       if (!Number.isFinite(deposit) || deposit <= 0) {
+        if (window.innerWidth <= 720) {
+          depositInput.focus({ preventScroll: true });
+          depositInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         showToast('Vui lòng nhập số tiền nạp hợp lệ.');
         return;
       }
@@ -1393,6 +1856,7 @@
 
     closePopup.addEventListener('click', () => {
       popupOverlay.classList.remove('active');
+      setAppModalLock(false);
       setRobotMessage(robotMessages[messageIndex], false);
     });
 
@@ -1405,10 +1869,20 @@
     });
 
     let resizeTimer;
+    let lastEffectWidth = window.innerWidth;
+    let lastEffectMode = window.innerWidth < 720 ? 'mobile' : 'desktop';
     window.addEventListener('resize', () => {
+      updateViewportUnit();
+      const currentMode = window.innerWidth < 720 ? 'mobile' : 'desktop';
+      const widthChanged = Math.abs(window.innerWidth - lastEffectWidth) > 24 || currentMode !== lastEffectMode;
+      if (!widthChanged) return;
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(createBackgroundEffects, 250);
-    });
+      resizeTimer = setTimeout(() => {
+        lastEffectWidth = window.innerWidth;
+        lastEffectMode = window.innerWidth < 720 ? 'mobile' : 'desktop';
+        createBackgroundEffects();
+      }, 250);
+    }, { passive: true });
 
     initSelects();
     createBackgroundEffects();
