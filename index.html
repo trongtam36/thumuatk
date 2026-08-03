@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>AI VIP ACCOUNT SCANNER</title>
+  <title>Hệ thống thu mua tài khoản VIP Minh Ngọc</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -203,51 +203,120 @@
     .system-badge i { animation: pulseDot 1.4s infinite; }
 
     .hero-title {
-      margin-top: 18px;
+      margin: 18px auto 0;
+      max-width: 1120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      text-align: center;
+      animation: titleFlicker 5.5s infinite;
+    }
+
+    .hero-main {
+      display: block;
+      position: relative;
       font-family: 'Orbitron', monospace;
-      font-size: clamp(34px, 6vw, 76px);
-      line-height: 1.03;
-      letter-spacing: .04em;
+      font-size: clamp(30px, 5vw, 60px);
+      line-height: 1.08;
+      letter-spacing: .035em;
       color: #fff;
+      text-wrap: balance;
       text-shadow:
         0 0 8px rgba(34, 247, 255, .8),
         0 0 20px rgba(52, 255, 138, .35),
         0 0 42px rgba(255, 209, 102, .22);
-      position: relative;
-      animation: titleFlicker 5.5s infinite;
     }
 
-    .hero-title::before,
-    .hero-title::after {
+    .hero-main::before,
+    .hero-main::after {
       content: attr(data-text);
       position: absolute;
       inset: 0;
       pointer-events: none;
-      opacity: .5;
+      opacity: .48;
     }
 
-    .hero-title::before { color: var(--cyan); transform: translate(2px, -1px); clip-path: inset(0 0 58% 0); animation: glitchA 3.5s infinite; }
-    .hero-title::after { color: var(--gold); transform: translate(-2px, 1px); clip-path: inset(58% 0 0 0); animation: glitchB 4.2s infinite; }
+    .hero-main::before { color: var(--cyan); transform: translate(2px, -1px); clip-path: inset(0 0 58% 0); animation: glitchA 3.5s infinite; }
+    .hero-main::after { color: var(--gold); transform: translate(-2px, 1px); clip-path: inset(58% 0 0 0); animation: glitchB 4.2s infinite; }
+
+    .hero-subline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 209, 102, .28);
+      background: linear-gradient(135deg, rgba(255,255,255,.05), rgba(0,0,0,.12));
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(14px, 2vw, 20px);
+      line-height: 1.35;
+      letter-spacing: .12em;
+      color: rgba(234, 248, 255, .88);
+      box-shadow: 0 0 24px rgba(255, 209, 102, .08), inset 0 0 18px rgba(34, 247, 255, .05);
+      text-wrap: balance;
+    }
 
     .gloss-sweep {
       position: absolute;
-      left: 10%;
-      right: 10%;
-      top: 48%;
-      height: 34px;
+      left: 12%;
+      right: 12%;
+      top: 10px;
+      height: 52px;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), rgba(255,209,102,.55), transparent);
       transform: skewX(-22deg) translateX(-140%);
       animation: glossy 4.8s ease-in-out infinite;
       mix-blend-mode: screen;
       pointer-events: none;
+      opacity: .7;
     }
 
     .subtitle {
-      margin: 14px auto 0;
-      max-width: 760px;
+      margin: 16px auto 0;
+      max-width: 780px;
       color: var(--muted);
-      font-size: clamp(17px, 2.2vw, 23px);
+      font-size: clamp(17px, 2.1vw, 22px);
       font-weight: 600;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .hero-contact {
+      margin: 18px auto 0;
+      width: min(790px, 94%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background:
+        linear-gradient(135deg, rgba(255, 209, 102, .12), rgba(34, 247, 255, .055)),
+        rgba(4, 14, 20, .72);
+      border: 1px solid rgba(255, 209, 102, .28);
+      box-shadow: 0 0 30px rgba(255, 209, 102, .09), inset 0 0 18px rgba(34, 247, 255, .04);
+      text-align: center;
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-contact i {
+      color: #2AABEE;
+      font-size: 18px;
+      filter: drop-shadow(0 0 10px rgba(42, 171, 238, .35));
+    }
+
+    .hero-contact-note {
+      color: rgba(234, 248, 255, .86);
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.48;
+      letter-spacing: .01em;
+    }
+
+    .hero-contact-note strong {
+      color: var(--gold);
+      font-weight: 900;
     }
 
     .ticker-line {
@@ -269,7 +338,7 @@
     }
 
     .ticker-line::before {
-      content: "LIQUIDITY STREAM • BLOCKCHAIN VALUATION • AI VIP RISK SCAN • REAL-TIME QUOTE";
+      content: "MINH NGỌC VIP • ĐỊNH GIÁ NHANH • THU MUA TÀI KHOẢN VIP • KẾT NỐI TELEGRAM";
       white-space: nowrap;
       animation: ticker 16s linear infinite;
     }
@@ -349,27 +418,72 @@
 
     .card-inner { position: relative; z-index: 3; padding: 30px; }
 
+    .form-card {
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255, 209, 102, .12), transparent 32%),
+        radial-gradient(circle at 88% 12%, rgba(34, 247, 255, .10), transparent 30%),
+        linear-gradient(180deg, rgba(9, 16, 24, .94), rgba(2, 7, 12, .9));
+      border-color: rgba(255, 209, 102, .32);
+    }
+
+    .form-head {
+      margin-bottom: 22px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .form-copy { min-width: 0; }
+
     .section-title {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
+      gap: 11px;
+      margin: 0;
       font-family: 'Orbitron', monospace;
-      font-size: clamp(16px, 2vw, 22px);
-      letter-spacing: .08em;
+      font-size: clamp(17px, 1.8vw, 20px);
+      line-height: 1.35;
+      letter-spacing: .055em;
       color: #fff;
       text-transform: uppercase;
     }
 
     .section-title i {
+      flex: 0 0 auto;
       color: var(--gold);
       text-shadow: 0 0 16px rgba(255, 209, 102, .55);
+    }
+
+    .form-desc {
+      margin: 9px 0 0;
+      color: rgba(234, 248, 255, .68);
+      font-size: 14.5px;
+      line-height: 1.55;
+      font-weight: 600;
+    }
+
+    .secure-chip {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(52, 255, 138, .25);
+      background: rgba(52, 255, 138, .075);
+      color: rgba(52, 255, 138, .92);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      white-space: nowrap;
+      box-shadow: inset 0 0 14px rgba(52, 255, 138, .05);
     }
 
     .form-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
+      gap: 16px;
     }
 
     .field { position: relative; }
@@ -381,30 +495,37 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 8px;
-      color: rgba(234, 248, 255, .84);
-      font-size: 15px;
+      color: rgba(234, 248, 255, .78);
+      font-size: 14px;
       font-weight: 700;
-      letter-spacing: .05em;
-      text-transform: uppercase;
+      letter-spacing: .01em;
+      text-transform: none;
     }
 
-    .field label i { color: var(--cyan); }
+    .field label i {
+      width: 17px;
+      text-align: center;
+      color: var(--gold);
+      opacity: .92;
+    }
 
     .input-shell {
       position: relative;
-      border-radius: 14px;
+      border-radius: 16px;
       padding: 1px;
-      background: linear-gradient(135deg, rgba(34, 247, 255, .65), rgba(52, 255, 138, .18), rgba(255, 209, 102, .5));
+      background: linear-gradient(135deg, rgba(255, 209, 102, .48), rgba(34, 247, 255, .25), rgba(255, 255, 255, .08));
       overflow: hidden;
+      transition: box-shadow .2s ease, transform .2s ease, background .2s ease;
     }
 
     .input-shell::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
       transform: translateX(-120%);
-      transition: transform .65s ease;
+      transition: transform .55s ease;
+      pointer-events: none;
     }
 
     .field:hover .input-shell::before,
@@ -412,27 +533,58 @@
 
     input, select {
       width: 100%;
-      height: 54px;
+      height: 56px;
       border: 0;
       outline: 0;
-      border-radius: 13px;
+      border-radius: 15px;
       color: var(--text);
       background:
-        linear-gradient(90deg, rgba(34, 247, 255, .055), transparent),
-        rgba(1, 10, 14, .88);
+        linear-gradient(180deg, rgba(255, 255, 255, .045), rgba(255, 255, 255, .015)),
+        rgba(4, 12, 18, .94);
       padding: 0 16px;
       font-family: 'Exo 2', sans-serif;
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 700;
-      letter-spacing: .02em;
-      box-shadow: inset 0 0 18px rgba(0,0,0,.52);
+      letter-spacing: .01em;
+      box-shadow: inset 0 0 18px rgba(0,0,0,.46);
+      transition: background .2s ease, color .2s ease, box-shadow .2s ease;
     }
 
     select { cursor: pointer; color-scheme: dark; }
-    input::placeholder { color: rgba(34, 247, 255, .42); }
+    input::placeholder { color: rgba(234, 248, 255, .36); font-weight: 600; }
 
-    .field:focus-within label { color: var(--gold); text-shadow: 0 0 12px rgba(255, 209, 102, .45); }
-    .field:focus-within .input-shell { box-shadow: 0 0 0 1px rgba(255, 209, 102, .4), 0 0 28px rgba(34, 247, 255, .18); }
+    .money-field input { padding-right: 66px; }
+
+    .input-suffix {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      color: rgba(255, 209, 102, .9);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .05em;
+      pointer-events: none;
+    }
+
+    .field:focus-within label { color: #fff; text-shadow: 0 0 12px rgba(255, 209, 102, .28); }
+    .field:focus-within .input-shell { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(255, 209, 102, .42), 0 0 24px rgba(255, 209, 102, .12); }
+    .field:focus-within input,
+    .field:focus-within select { background: rgba(6, 15, 22, .98); }
+
+    .form-note {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: rgba(234, 248, 255, .62);
+      font-size: 13.5px;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .form-note i { color: var(--cyan); }
 
     /* Button Effects */
     .scan-button {
@@ -446,9 +598,9 @@
       cursor: pointer;
       color: #041013;
       font-family: 'Orbitron', monospace;
-      font-size: clamp(16px, 2.1vw, 22px);
+      font-size: clamp(15px, 1.7vw, 18px);
       font-weight: 900;
-      letter-spacing: .12em;
+      letter-spacing: .075em;
       text-transform: uppercase;
       background: linear-gradient(110deg, var(--cyan), var(--green), var(--gold), var(--purple));
       background-size: 240% 100%;
@@ -549,7 +701,19 @@
       display: flex;
       align-items: flex-end;
       gap: 14px;
-      pointer-events: none;
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .robot-zone:hover .chat-bubble {
+      border-color: rgba(255, 209, 102, .72);
+      box-shadow: 0 0 38px rgba(255, 209, 102, .22), inset 0 0 18px rgba(255, 209, 102, .08);
+    }
+
+    .robot-zone:hover .robot {
+      filter: drop-shadow(0 0 28px rgba(255, 209, 102, .58)) drop-shadow(0 0 18px rgba(34, 247, 255, .35));
     }
 
     .chat-bubble {
@@ -773,6 +937,11 @@
 
     .popup-overlay.active .result-popup { transform: scale(1); opacity: 1; }
 
+
+    .result-popup .section-title {
+      margin-bottom: 22px;
+    }
+
     .result-popup.rank-chi-ton {
       animation: rainbowBorder 3s linear infinite;
     }
@@ -870,8 +1039,10 @@
       border-radius: 15px;
       border: 1px solid rgba(255,255,255,.18);
       font-family: 'Orbitron', monospace;
+      font-size: 14px;
+      line-height: 1.35;
       font-weight: 900;
-      letter-spacing: .06em;
+      letter-spacing: .045em;
       text-decoration: none;
       cursor: pointer;
       transition: transform .2s ease, filter .2s ease;
@@ -969,7 +1140,8 @@
       .form-grid, .result-grid, .side-stack { grid-template-columns: 1fr; }
       .card-inner { padding: 22px; }
       .notify-card .card-inner { padding: 20px; }
-      .hero-title { letter-spacing: .02em; }
+      .hero-main { letter-spacing: .02em; }
+      .hero-subline { padding: 9px 16px; letter-spacing: .08em; }
       .system-badge { font-size: 10px; padding: 7px 11px; }
       .scan-button { height: 60px; letter-spacing: .06em; }
       .robot-zone { align-items: flex-end; gap: 8px; right: 10px; bottom: 10px; }
@@ -1117,16 +1289,34 @@
         padding-bottom: 22px;
       }
 
-      .hero-title {
+      .hero-main {
         font-size: clamp(27px, 10vw, 42px);
         line-height: 1.12;
         overflow-wrap: anywhere;
         word-break: keep-all;
       }
 
+      .hero-subline {
+        font-size: 13px;
+        line-height: 1.45;
+        padding: 9px 14px;
+      }
+
       .subtitle {
         font-size: 16px;
         padding: 0 4px;
+      }
+
+      .hero-contact {
+        width: min(100%, 96%);
+        padding: 11px 13px;
+        border-radius: 18px;
+        gap: 9px;
+      }
+
+      .hero-contact-note {
+        font-size: 13.5px;
+        line-height: 1.45;
       }
 
       .ticker-line {
@@ -1148,11 +1338,25 @@
         padding: 18px 15px;
       }
 
+      .form-head {
+        margin-bottom: 18px;
+        flex-direction: column;
+        gap: 10px;
+      }
+
       .section-title {
         gap: 9px;
-        margin-bottom: 18px;
-        font-size: 14px;
+        font-size: 15px;
         line-height: 1.35;
+      }
+
+      .form-desc {
+        font-size: 13.5px;
+      }
+
+      .secure-chip {
+        font-size: 11.5px;
+        padding: 8px 10px;
       }
 
       .form-grid {
@@ -1160,27 +1364,32 @@
       }
 
       .field label {
-        font-size: 13px;
+        font-size: 13.5px;
         margin-bottom: 7px;
       }
 
       input,
       select {
         height: 52px;
-        border-radius: 12px;
+        border-radius: 13px;
         padding-left: 14px;
+        font-size: 16px;
       }
 
+      .money-field input { padding-right: 58px; }
+      .input-suffix { right: 13px; font-size: 12px; }
+
       .input-shell {
-        border-radius: 13px;
+        border-radius: 14px;
       }
 
       .scan-button {
         margin-top: 18px;
         height: 58px;
         border-radius: 15px;
-        font-size: 15px;
+        font-size: 14px;
         line-height: 1.25;
+        letter-spacing: .045em;
       }
 
       .scan-button span {
@@ -1206,12 +1415,13 @@
       .robot-zone {
         right: max(8px, env(safe-area-inset-right));
         bottom: max(8px, env(safe-area-inset-bottom));
-        pointer-events: none;
+        pointer-events: auto;
+        -webkit-tap-highlight-color: transparent;
       }
 
       .robot-zone .chat-bubble,
       .robot-zone .robot {
-        pointer-events: none;
+        pointer-events: auto;
       }
 
       .chat-bubble {
@@ -1331,8 +1541,14 @@
         justify-content: center;
       }
 
-      .hero-title {
+      .hero-main {
         font-size: clamp(24px, 10vw, 36px);
+      }
+
+      .hero-subline {
+        font-size: 12px;
+        letter-spacing: .06em;
+        padding: 8px 12px;
       }
 
       .chat-bubble {
@@ -1414,9 +1630,17 @@
 
   <main class="page">
     <header>
-      <div class="system-badge"><i class="fa-solid fa-circle"></i> CRYPTO WEB3 AI TERMINAL</div>
-      <h1 class="hero-title" data-text="AI VIP ACCOUNT SCANNER">AI VIP ACCOUNT SCANNER<span class="gloss-sweep"></span></h1>
-      <p class="subtitle">Hệ thống quét dữ liệu và định giá thu mua tài khoản VIP tự động bằng AI</p>
+      <div class="system-badge"><i class="fa-solid fa-circle"></i> MINH NGỌC VIP TERMINAL</div>
+      <h1 class="hero-title" aria-label="Hệ thống thu mua tài khoản VIP Minh Ngọc - Định giá tài khoản VIP casino online">
+        <span class="hero-main" data-text="HỆ THỐNG THU MUA TÀI KHOẢN VIP MINH NGỌC">HỆ THỐNG THU MUA TÀI KHOẢN VIP MINH NGỌC</span>
+        <span class="hero-subline">ĐỊNH GIÁ TÀI KHOẢN VIP CASINO ONLINE</span>
+        <span class="gloss-sweep"></span>
+      </h1>
+      <p class="subtitle">Nhập thông tin tài khoản để xem nhanh khung giá thu mua theo cấp VIP. Khi cần chốt giá, khách hàng bấm vào robot Telegram ở góc phải màn hình hoặc nút liên hệ trong kết quả định giá.</p>
+      <div class="hero-contact">
+        <i class="fa-brands fa-telegram"></i>
+        <div class="hero-contact-note"><strong>Liên hệ Telegram Minh Ngọc:</strong> bấm vào <strong>robot góc phải màn hình</strong> sau khi xem thông tin.</div>
+      </div>
       <div class="ticker-line"></div>
     </header>
 
@@ -1424,19 +1648,25 @@
       <div class="hud-card form-card">
         <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
         <div class="card-inner">
-          <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> Crypto Trading Box - Nhập dữ liệu định giá</h2>
+          <div class="form-head">
+            <div class="form-copy">
+              <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> Nhập dữ liệu định giá</h2>
+              <p class="form-desc">Điền các thông tin cơ bản để hệ thống trả về khung giá thu mua phù hợp theo cấp VIP.</p>
+            </div>
+            <div class="secure-chip"><i class="fa-solid fa-shield-halved"></i> Xử lý nhanh</div>
+          </div>
           <form id="scannerForm" novalidate>
             <div class="form-grid">
               <div class="field">
-                <label for="username"><i class="fa-solid fa-user-astronaut"></i> Tên đăng nhập</label>
-                <div class="input-shell"><input id="username" type="text" placeholder="Nhập tên nhân vật / tài khoản" autocomplete="off"></div>
+                <label for="username"><i class="fa-solid fa-user"></i> Tên đăng nhập</label>
+                <div class="input-shell"><input id="username" type="text" placeholder="Tên tài khoản" autocomplete="off"></div>
               </div>
               <div class="field">
                 <label for="gameSite"><i class="fa-solid fa-gamepad"></i> Trang game</label>
-                <div class="input-shell"><input id="gameSite" type="text" placeholder="Nhập tên trang game" autocomplete="off"></div>
+                <div class="input-shell"><input id="gameSite" type="text" placeholder="Tên trang casino" autocomplete="off"></div>
               </div>
               <div class="field">
-                <label for="vipLevel"><i class="fa-solid fa-crown"></i> Cấp độ VIP</label>
+                <label for="vipLevel"><i class="fa-solid fa-crown"></i> Cấp VIP</label>
                 <div class="input-shell"><select id="vipLevel"></select></div>
               </div>
               <div class="field">
@@ -1447,12 +1677,13 @@
                 <label for="year"><i class="fa-solid fa-calendar-check"></i> Năm nạp</label>
                 <div class="input-shell"><select id="year"></select></div>
               </div>
-              <div class="field">
+              <div class="field money-field">
                 <label for="deposit"><i class="fa-solid fa-wallet"></i> Tổng nạp tháng</label>
-                <div class="input-shell"><input id="deposit" inputmode="numeric" type="text" placeholder="Ví dụ: 10.000.000 VNĐ" autocomplete="off"></div>
+                <div class="input-shell"><input id="deposit" inputmode="numeric" type="text" placeholder="Ví dụ: 10.000.000" autocomplete="off"><span class="input-suffix">VNĐ</span></div>
               </div>
             </div>
-            <button class="scan-button" id="scanButton" type="submit"><span><i class="fa-solid fa-robot"></i> CHECK THÔNG TIN</span></button>
+            <div class="form-note"><i class="fa-solid fa-circle-info"></i> Số tiền sẽ tự động định dạng khi nhập, không cần gõ dấu chấm.</div>
+            <button class="scan-button" id="scanButton" type="submit"><span><i class="fa-solid fa-robot"></i> KIỂM TRA THÔNG TIN</span></button>
           </form>
         </div>
       </div>
@@ -1476,9 +1707,9 @@
     </section>
   </main>
 
-  <div class="robot-zone" aria-live="polite">
-    <div class="chat-bubble" id="chatBubble">Xin chào! Hãy nhập thông tin tài khoản để tôi quét giá trị VIP.</div>
-    <div class="robot" id="robotAi" aria-label="Robot AI assistant">
+  <a class="robot-zone" href="https://t.me/minhngocluxury" target="_blank" rel="noopener" aria-live="polite" aria-label="Bấm để kết nối Telegram Minh Ngọc">
+    <div class="chat-bubble" id="chatBubble">👉 Bấm robot để mở Telegram Minh Ngọc.</div>
+    <div class="robot" id="robotAi" aria-label="Robot Telegram Minh Ngọc">
       <div class="robot-ring"></div>
       <div class="bot-antenna"></div>
       <div class="bot-head"></div>
@@ -1486,7 +1717,7 @@
       <div class="bot-arm right"></div>
       <div class="bot-body"></div>
     </div>
-  </div>
+  </a>
 
   <div class="scanner-overlay" id="scannerOverlay">
     <div class="hud-card scanner-box">
@@ -1512,12 +1743,12 @@
           <div class="result-item"><span>Tổng nạp</span><strong id="resDeposit">---</strong></div>
         </div>
         <div class="price-box">
-          <div class="price-label">Giá thu mua AI đề xuất</div>
+          <div class="price-label">Khung giá thu mua theo cấp VIP</div>
           <div class="price-value" id="resPrice">0 VNĐ</div>
         </div>
-        <p class="note">Giá hiển thị chỉ là giá dự kiến mô phỏng từ AI. Giá chính thức phụ thuộc vào kiểm tra tài khoản, máy chủ, lịch sử nạp và tình trạng giao dịch thực tế.</p>
+        <p class="note">Giá hiển thị là khung giá tham khảo theo cấp VIP. Giá chốt chính thức có thể thay đổi tùy tình trạng tài khoản, trang game, lịch sử nạp và thời điểm giao dịch thực tế.</p>
         <div class="popup-actions">
-          <a class="action-link" href="https://example.com" target="_blank" rel="noopener"><i class="fa-solid fa-handshake-angle"></i> LIÊN HỆ GIAO DỊCH NGAY</a>
+          <a class="action-link" href="https://t.me/minhngocluxury" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i> MỞ TELEGRAM ĐỂ CHỐT GIÁ</a>
           <button class="close-btn" id="closePopup" type="button"><i class="fa-solid fa-xmark"></i> ĐÓNG</button>
         </div>
       </div>
@@ -1591,7 +1822,7 @@
 
     function initSelects() {
       vipLevel.innerHTML = '<option value="">Chọn cấp VIP</option>';
-      for (let i = 3; i <= 60; i++) vipLevel.insertAdjacentHTML('beforeend', `<option value="${i}">VIP ${i}</option>`);
+      for (let i = 5; i <= 60; i++) vipLevel.insertAdjacentHTML('beforeend', `<option value="${i}">VIP ${i}</option>`);
       monthSelect.innerHTML = '<option value="">Chọn tháng</option>';
       for (let i = 1; i <= 12; i++) monthSelect.insertAdjacentHTML('beforeend', `<option value="${i}">Tháng ${i}</option>`);
       const yearNow = new Date().getFullYear();
@@ -1602,33 +1833,55 @@
     function onlyDigits(value) { return String(value || '').replace(/\D/g, ''); }
     function parseMoney(value) { return Number(onlyDigits(value)); }
     function formatVND(value) { return Math.round(Number(value || 0)).toLocaleString('vi-VN') + ' VNĐ'; }
+    function formatMoneyTyping(digits) { return String(digits || '').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+    function caretFromDigitIndex(formatted, digitIndex) {
+      if (!digitIndex) return 0;
+      let count = 0;
+      for (let i = 0; i < formatted.length; i++) {
+        if (/\d/.test(formatted[i])) count++;
+        if (count >= digitIndex) return i + 1;
+      }
+      return formatted.length;
+    }
 
     depositInput.addEventListener('input', () => {
-      const digits = onlyDigits(depositInput.value);
-      depositInput.value = digits ? Number(digits).toLocaleString('vi-VN') + ' VNĐ' : '';
+      const cursor = depositInput.selectionStart || 0;
+      const digitsBeforeCursor = onlyDigits(depositInput.value.slice(0, cursor)).length;
+      const digits = onlyDigits(depositInput.value).slice(0, 15);
+      const formatted = formatMoneyTyping(digits);
+      depositInput.value = formatted;
+      const nextCursor = caretFromDigitIndex(formatted, digitsBeforeCursor);
+      requestAnimationFrame(() => depositInput.setSelectionRange(nextCursor, nextCursor));
     });
 
-    // Rank Logic
+    // VIP Price Tier Logic - giá thu mua bám theo khung Minh Ngọc
     const ranks = [
-      { name: 'Sơ Cấp', min: 3, max: 5, factor: .8, cls: 'rank-so-cap' },
-      { name: 'Trung Cấp', min: 6, max: 10, factor: 1.0, cls: 'rank-trung-cap' },
-      { name: 'Cao Cấp', min: 11, max: 15, factor: 1.2, cls: 'rank-cao-cap' },
-      { name: 'Tông Sư', min: 16, max: 25, factor: 1.5, cls: 'rank-tong-su' },
-      { name: 'Vương Giả', min: 26, max: 40, factor: 1.9, cls: 'rank-vuong-gia' },
-      { name: 'Chí Tôn', min: 41, max: 60, factor: 2.3, cls: 'rank-chi-ton' }
+      { name: 'VIP 5 - 10', min: 5, max: 10, minPrice: 3000000, maxPrice: 6000000, cls: 'rank-so-cap' },
+      { name: 'VIP 11 - 20', min: 11, max: 20, minPrice: 8000000, maxPrice: 20000000, cls: 'rank-cao-cap' },
+      { name: 'VIP 21 - 30', min: 21, max: 30, minPrice: 21000000, maxPrice: 40000000, cls: 'rank-tong-su' },
+      { name: 'VIP 31 - 35', min: 31, max: 35, minPrice: 40000000, maxPrice: 60000000, cls: 'rank-vuong-gia' },
+      { name: 'VIP 36 - 40', min: 36, max: 40, minPrice: 60000000, maxPrice: 100000000, cls: 'rank-vuong-gia' },
+      { name: 'VIP 41+', min: 41, max: 60, negotiable: true, cls: 'rank-chi-ton' }
     ];
 
-    function getRank(vip) { return ranks.find(r => vip >= r.min && vip <= r.max) || ranks[0]; }
-    function getLevelFactor(vip, rank) {
-      if (rank.max === rank.min) return 1;
-      return 1 + ((vip - rank.min) * 0.2 / (rank.max - rank.min));
+    function getRank(vip) {
+      return ranks.find(r => vip >= r.min && vip <= r.max) || ranks[0];
     }
+
+    function getPriceLabel(rank) {
+      if (rank.negotiable) return 'THƯƠNG LƯỢNG TRỰC TIẾP';
+      return `${formatVND(rank.minPrice)} - ${formatVND(rank.maxPrice)}`;
+    }
+
     function calculatePrice(deposit, vip) {
       const rank = getRank(vip);
-      const collectRate = 0.2;
-      const levelFactor = getLevelFactor(vip, rank);
-      const price = deposit * collectRate * rank.factor * levelFactor;
-      return { price: Math.round(price / 1000) * 1000, rank, levelFactor };
+      return {
+        rank,
+        priceMin: rank.minPrice || 0,
+        priceMax: rank.maxPrice || 0,
+        priceLabel: getPriceLabel(rank),
+        negotiable: Boolean(rank.negotiable)
+      };
     }
 
     // Toast Validation
@@ -1646,12 +1899,12 @@
     const pendingList = document.getElementById('pendingList');
     const doneList = document.getElementById('doneList');
     const pendingMessages = [
-      'đang chờ chuyển đổi VIP', 'đang được AI phân tích giá trị', 'đang chờ xác nhận giao dịch',
+      'đang chờ chuyển đổi VIP', 'đang được kiểm tra khung giá', 'đang chờ xác nhận giao dịch',
       'đang được định giá tài khoản', 'đang quét lịch sử nạp', 'đang kiểm tra thanh khoản VIP'
     ];
     const doneMessages = [
       'đã chuyển VIP thành công', 'đã nhận báo giá thành công', 'đã hoàn tất giao dịch',
-      'đã chốt giá thu mua', 'đã hoàn tất chuyển đổi', 'đã nhận định giá AI'
+      'đã chốt giá thu mua', 'đã hoàn tất chuyển đổi', 'đã nhận khung giá VIP'
     ];
     const names = ['Dragon89', 'KingVIP', 'ThanhLong', 'Cyber88', 'MoneyPro', 'VipGold', 'Shadow88', 'CyberVN', 'GoldKing', 'CoinVIP', 'Rich89', 'BlockPro'];
 
@@ -1683,12 +1936,12 @@
     const chatBubble = document.getElementById('chatBubble');
     const robotAi = document.getElementById('robotAi');
     const robotMessages = [
-      'Xin chào! Hãy nhập thông tin tài khoản để tôi quét giá trị VIP.',
-      'Hệ thống AI đang phân tích dữ liệu giao dịch tài sản theo thời gian thực.',
-      'Tài khoản VIP càng cao, hiệu ứng định giá tài sản càng mạnh.',
-      'Dữ liệu đang được mã hóa trong vùng quét an toàn.',
-      'AI đang theo dõi dòng thanh khoản và lịch sử nạp của tài khoản.',
-      'Sau khi có giá dự kiến, bạn có thể bấm liên hệ giao dịch ngay.'
+      '👉 Bấm robot để mở Telegram Minh Ngọc.',
+      'Bấm robot góc phải màn hình để mở Telegram Minh Ngọc.',
+      'VIP 41 trở lên sẽ được thương lượng trực tiếp qua Telegram.',
+      'Hệ thống đang hỗ trợ định giá nhanh tài khoản VIP casino online.',
+      'Sau khi có khung giá, hãy bấm Telegram để được tư vấn chốt giá.',
+      'Telegram Minh Ngọc: bấm robot hoặc nút KẾT NỐI TELEGRAM.'
     ];
     let messageIndex = 0;
     let robotInterval;
@@ -1744,7 +1997,7 @@
       'Đang kiểm tra dữ liệu giao dịch...',
       'Đang quét dòng tiền tài khoản...',
       'Đang tính toán tỷ lệ thanh khoản...',
-      'Đang tạo báo giá AI...'
+      'Đang tạo khung giá thu mua...'
     ];
 
     function runScanner(callback) {
@@ -1759,8 +2012,8 @@
       percentText.textContent = '0%';
       loadingText.textContent = loadingMessages[0];
       scanButton.classList.add('scanning');
-      scanButton.querySelector('span').innerHTML = '<i class="fa-solid fa-satellite-dish"></i> AI SCANNING...';
-      setRobotMessage('Đang quét dữ liệu...', true);
+      scanButton.querySelector('span').innerHTML = '<i class="fa-solid fa-satellite-dish"></i> ĐANG KIỂM TRA...';
+      setRobotMessage('Đang kiểm tra khung giá VIP...', true);
 
       const timer = setInterval(() => {
         percent += Math.floor(Math.random() * 8) + 4;
@@ -1781,29 +2034,33 @@
             scanButton.disabled = false;
             scanButton.classList.remove('scanning');
             scanButton.querySelector('span').innerHTML = '<i class="fa-solid fa-robot"></i> CHECK THÔNG TIN';
-            setRobotMessage('Đã hoàn tất phân tích tài khoản.', true);
+            setRobotMessage('Đã hoàn tất định giá. Bấm robot hoặc nút Telegram để liên hệ.', true);
             callback();
           }, 420);
         }
       }, 110);
     }
 
-    function animatePrice(target) {
+    function animatePriceRange(priceMin, priceMax, priceLabel, negotiable) {
       const el = document.getElementById('resPrice');
-      const duration = 1200;
+      if (negotiable) {
+        el.textContent = priceLabel;
+        return;
+      }
+      const duration = 1100;
       const start = performance.now();
       function step(now) {
         const progress = Math.min((now - start) / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = formatVND(target * eased);
+        el.textContent = `${formatVND(priceMin * eased)} - ${formatVND(priceMax * eased)}`;
         if (progress < 1) requestAnimationFrame(step);
-        else el.textContent = formatVND(target);
+        else el.textContent = priceLabel;
       }
       requestAnimationFrame(step);
     }
 
     function showResult(data) {
-      const { username, gameSite, vip, month, year, deposit, price, rank } = data;
+      const { username, gameSite, vip, month, year, deposit, priceMin, priceMax, priceLabel, negotiable, rank } = data;
       resultPopup.className = `hud-card result-popup ${rank.cls}`;
       document.getElementById('resUser').textContent = username;
       document.getElementById('resGame').textContent = gameSite;
@@ -1811,12 +2068,12 @@
       document.getElementById('resRank').innerHTML = `<i class="fa-solid fa-bolt"></i>${rank.name}`;
       document.getElementById('resTime').textContent = `Tháng ${month}/${year}`;
       document.getElementById('resDeposit').textContent = formatVND(deposit);
-      document.getElementById('resPrice').textContent = '0 VNĐ';
+      document.getElementById('resPrice').textContent = negotiable ? 'THƯƠNG LƯỢNG' : '0 VNĐ';
       resultPopup.scrollTop = 0;
       popupOverlay.scrollTop = 0;
       popupOverlay.classList.add('active');
       setAppModalLock(true);
-      animatePrice(price);
+      animatePriceRange(priceMin, priceMax, priceLabel, negotiable);
     }
 
     form.addEventListener('submit', (event) => {
@@ -1838,7 +2095,7 @@
           yearSelect,
           depositInput
         ]);
-        showToast('Vui lòng nhập đầy đủ dữ liệu để AI bắt đầu quét tài khoản.');
+        showToast('Vui lòng nhập đầy đủ dữ liệu để bắt đầu kiểm tra tài khoản.');
         return;
       }
       if (!Number.isFinite(deposit) || deposit <= 0) {
